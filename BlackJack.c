@@ -286,7 +286,7 @@ int main() {
                 DrawText("you won and the dealer is MAD", 250, 230, 30, GREEN);
             }
             else if (playerTotal < dealerTotal) {
-                DrawText("fuck you dealer wins", 250, 230, 30, RED);
+                DrawText("aw man the dealer wins", 250, 230, 30, RED);
             }
             else {
                 DrawText("thats a draw baby", 250, 230, 30, WHITE);
