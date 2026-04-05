@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Blackjack",
+      "type": "shell",
+      "command": "gcc BlackJack.c -o BlackJack && ./BlackJack",
+      "group": "build"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Blackjack",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "gcc BlackJack.c -o BlackJack.exe -IC:/raylib/raylib/src -LC:/raylib/raylib/src -lraylib -lopengl32 -lgdi32 -lwinmm; ./BlackJack.exe"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}
