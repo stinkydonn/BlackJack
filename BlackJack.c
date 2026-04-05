@@ -6,8 +6,8 @@
 
 //===============================================================//
 //              DONN WILSONS BLACKJACK!!                         //
-// I have attempted t neated up the code as much as possible but //
-//    am in a time crunch so sorry if things look a bit off      //
+//                  B37VB Game Project                           //
+//                      :)                                       //
 //===============================================================//
 
 
@@ -160,12 +160,17 @@ void drawCard(int x, int y, const char *rank, int suit) {
     DrawText(rank, x + 55, y + 95, 20, color);
 }
 
-//
+//this is the face down card that the dealer has, all the #s make up the design on the back
 void drawHiddenCard(int x, int y) {
     DrawRectangleRounded((Rectangle){x, y, 80, 120}, 0.2, 6, DARKBLUE);
     DrawRectangleRoundedLines((Rectangle){x, y, 80, 120}, 0.2, 6, BLACK);
     DrawText("#####\n#####\n#####\n#####\n#####\n", x + 7, y + 7, 20, WHITE);
 }
+
+//======================================
+// THE MAIN GAME ! :D
+//======================================
+
 
 int main() {
     srand(time(NULL));
@@ -173,17 +178,19 @@ int main() {
     InitWindow(800, 600, "Blackjack");
     SetTargetFPS(60);
 
+    //data for the deck
     int ranks[52], suits[52], values[52];
     int deckIndex = 0;
 
     createDeck(ranks, suits, values);
     shuffleDeck(ranks, suits, values);
-
+    //the players hand
     int playerCards[10];
     int playerCardCount = 2;
     playerCards[0] = deckIndex++;
     playerCards[1] = deckIndex++;
 
+    //the dealers hand
     int dealerCards[10];
     int dealerCardCount = 2;
     dealerCards[0] = deckIndex++;
@@ -191,23 +198,29 @@ int main() {
 
     int playerTotal = calculateTotal(playerCards, playerCardCount, values, ranks);
 
+    //game states so that the game doesnt just go on forever with no end goal
     bool playerStand = false;
     bool dealerDone = false;
     bool gameOver = false;
 
+    //==================================
+    // the game loop....
+    //=================================
     while (!WindowShouldClose()) {
 
+        //updates the players and the dealers total every frame
         playerTotal = calculateTotal(playerCards, playerCardCount, values, ranks);
         int dealerTotal = calculateTotal(dealerCards, dealerCardCount, values, ranks);
 
+        //mechjanics for if the player hits
         if (IsKeyPressed(KEY_H) && !playerStand && playerTotal <= 21 && playerCardCount < 10) {
             playerCards[playerCardCount++] = deckIndex++;
         }
-
+        //mechanics for if the player stands
         if (IsKeyPressed(KEY_S)) {
             playerStand = true;
         }
-
+        //this is the dealers play after you stand
         if (playerStand && !dealerDone) {
             while (dealerTotal < 17) {
                 dealerCards[dealerCardCount++] = deckIndex++;
@@ -215,21 +228,27 @@ int main() {
             }
             dealerDone = true;
         }
-
+        //==============================================
+        //drawing
+        //==============================================
         BeginDrawing();
-        ClearBackground(DARKGREEN);
 
+        //dark green background like the felt on an actual blackjack table
+        ClearBackground(DARKGREEN);
+        //title and controls
         DrawText("Donns Blackjack", 320, 20, 30, WHITE);
         DrawText("Press H to Hit or S to Stand", 250, 500, 20, WHITE);
 
+        //displays the value of the hand the player has
         DrawText(TextFormat("%d", playerTotal), 120, 340, 30, WHITE);
 
+        //draws the players card 
         for (int i = 0; i < playerCardCount; i++) {
             drawCard(200 + i * 100, 300,
                 rankNames[ranks[playerCards[i]]],
                 suits[playerCards[i]]);
         }
-
+        //also draws the dealers cards
         if (!playerStand) {
             drawCard(200, 100,
                 rankNames[ranks[dealerCards[0]]],
@@ -242,16 +261,17 @@ int main() {
                     suits[dealerCards[i]]);
             }
         }
-
+        //shows the dealers total (just shows a ? whenever the card is face down)
         if (!playerStand) {
             DrawText("?", 120, 140, 30, WHITE);
         } else {
             DrawText(TextFormat("%d", dealerTotal), 120, 140, 30, WHITE);
         }
-
+        //lables for neatness
         DrawText("Dealer", 120, 110, 20, WHITE);
         DrawText("You", 120, 310, 20, WHITE);
 
+        //the win / lose logicc
         if (playerTotal > 21) {
             DrawText("busted...", 250, 230, 30, RED);
             gameOver = true;
@@ -277,6 +297,7 @@ int main() {
 
         EndDrawing();
 
+        //lets you restart the game by pressing R after the game is done
         if (gameOver && IsKeyPressed(KEY_R)) {
             deckIndex = 0;
             shuffleDeck(ranks, suits, values);
@@ -299,3 +320,4 @@ int main() {
     CloseWindow();
     return 0;
 }
+//the end.......
